@@ -1,0 +1,6 @@
+flask_tacos.egg-info/PKG-INFO
+flask_tacos.egg-info/SOURCES.txt
+flask_tacos.egg-info/dependency_links.txt
+flask_tacos.egg-info/not-zip-safe
+flask_tacos.egg-info/requires.txt
+flask_tacos.egg-info/top_level.txt
