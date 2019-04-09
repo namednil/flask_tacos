@@ -76,6 +76,7 @@ def create_app(test_config=None):
         given_name = request.form['given_name']
         surname = request.form['surname']
         nutrition = request.form['nutrition']
+        busticket = "ticket" in request.form
 
         # check if something is missing
         formTags = ["email", "given_name", "surname", "nutrition"]
@@ -105,8 +106,8 @@ def create_app(test_config=None):
             
             # insert new user into db
             db.execute(
-                'INSERT INTO user (id, email, given_name, surname, nutrition) VALUES (?, ?, ?, ?, ?)',
-                (uid, email, given_name, surname, nutrition)
+                'INSERT INTO user (id, email, given_name, surname, nutrition, busticket) VALUES (?, ?, ?, ?, ?, ?)',
+                (uid, email, given_name, surname, nutrition, busticket)
             )
             db.commit()
             response['status']='OK'
@@ -190,15 +191,16 @@ def create_app(test_config=None):
         # app.logger.critical('this is a CRITICAL message')
         uid = ''.join(random.choice(string.ascii_letters) for _ in range(8))
 
-        html_message = "Hello {0},<br>".format("bla")
-        html_message += "Thank you for registering for TaCos29!<br>"
-        html_message += "Your code is {0}.<br>".format(uid)
+        html_message = "Hello {0},<br>".format(given_name)
+        html_message += "Thank you for registering for TaCoS29!<br>"
+        html_message += "Your code is {0}.<br><br>".format(uid)
         html_message += "If you want to check your registration status enter your code under ''Check Registration Status'' on <a href='https://tacos2019.coli.uni-saarland.de/registration/'>https://tacos2019.coli.uni-saarland.de/registration/</a><br>"
-        html_message += "To complete your registration send us X €.<br>"
+        html_message += "To complete your registration send us X €. Please also consider presenting something: <a href='https://tacos2019.coli.uni-saarland.de/call/'>https://tacos2019.coli.uni-saarland.de/call/</a><br><br>"
         html_message += "IBAN: de123456789xxxx<br>"
         html_message += "BIC: XXXXXXXXXXX<br>"
         html_message += "Reference (Verwendungszweck): {0}<br>".format(uid)
-        html_message += "Amount (Betrag): 10000000€<br>".format(uid)
+        html_message += "Amount (Betrag): 10000000€<br><br>".format(uid)
+        html_message += "Best,<br>Your TaCoS team"
 
         echo = subprocess.Popen(["echo", "",html_message, ""], stdout=subprocess.PIPE)
         output = subprocess.check_output(["mail", "-s", "subject", "-a", "Content-type: text/html", "moritzw@coli.uni-saarland.de"], stdin=echo.stdout)
