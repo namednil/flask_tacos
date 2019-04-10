@@ -11,11 +11,11 @@ CREATE TABLE user (
 );
 
 CREATE TABLE talk (
-  id TEXT PRIMARY KEY NOT NULL,
-  paper TEXT,
-  topic TEXT NOT NULL,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  uid TEXT NOT NULL,
+  title TEXT,
+  subtitle TEXT NOT NULL,
   type TEXT NOT NULL,
-  shortDescription TEXT,
   abstract TEXT,
   notes TEXT
 );

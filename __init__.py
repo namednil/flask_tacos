@@ -42,7 +42,7 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+        DATABASE=os.path.join(app.instance_path, 'tacos.sqlite'),
     )
 
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -80,7 +80,7 @@ def create_app(test_config=None):
         nutrition = request.form['nutrition']
         busticket = "ticket" in request.form
 
-        # check if something is missing
+        # check if something required is missing
         formTags = ["email", "given_name", "surname", "nutrition"]
         for tag in formTags:
              if request.form[tag] == "" or request.form[tag] is None:
@@ -88,6 +88,7 @@ def create_app(test_config=None):
                 response['message']="Please fill in your " + tag[0].upper() + tag[1:]
                 app.logger.info('Register error '+ tag)
                 return jsonify(response)
+
         # check if user is already registered
         db = get_db()
         if db.execute(
@@ -131,7 +132,6 @@ def create_app(test_config=None):
             # and flask-mail didn't want to work on the server)
             echo = subprocess.Popen(["echo", "",html_message, ""], stdout=subprocess.PIPE)
             output = subprocess.check_output(["mail", "-s", "TaCoS29 registration", "-a", "Content-type: text/html", email], stdin=echo.stdout)
-            app.logger.debug('Email sent '+ str(output))
 
             response['status']='OK'
             response['message']="Successfully registered"
@@ -149,13 +149,62 @@ def create_app(test_config=None):
         title = request.form['title']
         subtitle = request.form['subtitle']
         presentation = request.form['presentation']
-        description = request.form['description']
-        app.logger.info(request.form)
+        abstract = request.form['abstract']
+        notes = request.form['notes']
+        # app.logger.info(request.form)
 
+        # check if user is registered or not
+        # if db.execute('SELECT id FROM user WHERE id = ?', (uid,)).fetchone() is None:
+        #     response['status']='ERROR'
+        #     response['message']="Please register first"
+        #     return jsonify(response)
+
+        # check if something required is missing
+        formTags = ["uid", "title", "subtitle", "presentation"]
+        for tag in formTags:
+             if request.form[tag] == "" or request.form[tag] is None:
+                response['status']='ERROR'
+                response['message']="Please fill in the " + tag[0].upper() + tag[1:]
+                app.logger.info('Register error '+ tag)
+                return jsonify(response)
+
+        # save file in form uid + unique index number + .pdf to upload folder
+        index = 0
         for f in request.files:
             app.logger.info(f)
-            request.files[f].save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(uid + request.files[f].filename)))
-        return "N/A"
+            path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(uid + str(index) + request.files[f].filename))
+            while path.is_file():
+                path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(uid + str(index) + request.files[f].filename))
+            request.files[f].save(path)
+
+        # write into database
+        db.execute(
+            'INSERT INTO talk (uid, title, subtitle, type, abstract, shortDescription, notes) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            (uid, title, subtitle, presentation, abstract, description, notes)
+        )
+
+        # send email if everything went fine
+        # build email text
+        html_message = "Hello {0},<br>".format(given_name)
+        html_message += "Thank you for registering a talk for TaCoS29!<br>"
+        html_message += "Your code is {0}.<br><br>".format(uid)
+        html_message += "If you want to check your registration status enter your code under ''Check Registration Status'' on <a href='https://tacos2019.coli.uni-saarland.de/registration/'>https://tacos2019.coli.uni-saarland.de/registration/</a><br>"
+        html_message += "To complete your registration send us X €. Please also consider presenting something: <a href='https://tacos2019.coli.uni-saarland.de/call/'>https://tacos2019.coli.uni-saarland.de/call/</a><br><br>"
+        html_message += "IBAN: de123456789xxxx<br>"
+        html_message += "BIC: XXXXXXXXXXX<br>"
+        html_message += "Reference (Verwendungszweck): {0}<br>".format(uid)
+        html_message += "Amount (Betrag): 10000000€<br><br>".format(uid)
+        html_message += "Best,<br>Your TaCoS team"
+
+        # send email via terminal (a bit hacky but with this we don't need to save the password
+        # and flask-mail didn't want to work on the server)
+        echo = subprocess.Popen(["echo", "",html_message, ""], stdout=subprocess.PIPE)
+        output = subprocess.check_output(["mail", "-s", "TaCoS29 talk registration", "-a", "Content-type: text/html", "moritzw@coli.uni-saarland.de"], stdin=echo.stdout)
+
+        response['status']='OK'
+        response['message']="Successfully registered"
+        
+        return response
 
 
 
@@ -224,3 +273,9 @@ def create_app(test_config=None):
 
 
 
+@click.command('extract-db')
+@with_appcontext
+def init_db_command():
+    """Clear existing data and create new tables."""
+    pass
+    click.echo('Copied database csv to ')
