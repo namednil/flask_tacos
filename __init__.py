@@ -44,6 +44,8 @@ def create_app(test_config=None):
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
     )
+
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
     # app.config.update(mail_settings)
     # mail = Mail(app)
 
@@ -139,7 +141,7 @@ def create_app(test_config=None):
         return jsonify(response)
 
     @app.route('/talk', methods=["POST", "OPTIONS"])
-    @crossdomain(origin="*")
+    # @crossdomain(origin="*")
     def talk():
         response = {}
 
@@ -148,12 +150,11 @@ def create_app(test_config=None):
         subtitle = request.form['subtitle']
         presentation = request.form['presentation']
         description = request.form['description']
-        app.logger.error(request.files)
-        talk_file = request.files['talk_file']
 
+        for f in request.files:
+            f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(uid + f.filename)))
 
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(title)))
-
+        app.logger.info(request.form)
 
         return "N/A"
 

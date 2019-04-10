@@ -16,5 +16,6 @@ CREATE TABLE talk (
   topic TEXT NOT NULL,
   type TEXT NOT NULL,
   shortDescription TEXT,
+  abstract TEXT,
   notes TEXT
 );
