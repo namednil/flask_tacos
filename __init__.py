@@ -148,7 +148,7 @@ def create_app(test_config=None):
     def talk():
         response = {}
 
-        code = request.form['uid']
+        uid = request.form['uid']
         title = request.form['title']
         subtitle = request.form['subtitle']
         presentation = request.form['presentation']
@@ -156,20 +156,23 @@ def create_app(test_config=None):
         notes = request.form['notes']
         # app.logger.info(request.form)
 
-        # check if user is registered or not
-        # if db.execute('SELECT id FROM user WHERE id = ?', (uid,)).fetchone() is None:
-        #     response['status']='ERROR'
-        #     response['message']="Please register first"
-        #     return jsonify(response)
-
         # check if something required is missing
-        formTags = ["code", "title", "subtitle", "presentation"]
+        formTags = ["uid", "title", "subtitle", "presentation"]
         for tag in formTags:
              if request.form[tag] == "" or request.form[tag] is None:
+                 if tag == 'uid':
+                     tag = "code"
                 response['status']='ERROR'
                 response['message']="Please fill in the " + tag[0].upper() + tag[1:]
                 app.logger.info('Register error '+ tag)
                 return jsonify(response)
+
+        user = db.execute('SELECT * FROM user WHERE id=?', (uid,)).fetchone()
+        # check if user is registered or not
+        if user is None:
+            response['status']='ERROR'
+            response['message']="Please register first"
+            return jsonify(response)
 
         # save file in form uid + unique index number + .pdf to upload folder
         index = 0
@@ -187,28 +190,25 @@ def create_app(test_config=None):
             (code, title, subtitle, presentation, abstract, notes)
         )
 
+
         # send email if everything went fine
         # build email text
-        html_message = "Hello {0},<br>".format(given_name)
-        html_message += "Thank you for registering a talk for TaCoS29!<br>"
+        html_message = "Hello {0},<br>".format(user["given_name"])
+        html_message += "Thank you very much for registering a talk for TaCoS29!<br>"
         html_message += "Your code is {0}.<br><br>".format(uid)
-        html_message += "If you want to check your registration status enter your code under ''Check Registration Status'' on <a href='https://tacos2019.coli.uni-saarland.de/registration/'>https://tacos2019.coli.uni-saarland.de/registration/</a><br>"
+        html_message += "We will review what you sent us and let you know as soon as possible if and when your talk will happen.<br>"
         html_message += "To complete your registration send us X €. Please also consider presenting something: <a href='https://tacos2019.coli.uni-saarland.de/call/'>https://tacos2019.coli.uni-saarland.de/call/</a><br><br>"
-        html_message += "IBAN: de123456789xxxx<br>"
-        html_message += "BIC: XXXXXXXXXXX<br>"
-        html_message += "Reference (Verwendungszweck): {0}<br>".format(uid)
-        html_message += "Amount (Betrag): 10000000€<br><br>".format(uid)
         html_message += "Best,<br>Your TaCoS team"
 
         # send email via terminal (a bit hacky but with this we don't need to save the password
         # and flask-mail didn't want to work on the server)
         echo = subprocess.Popen(["echo", "",html_message, ""], stdout=subprocess.PIPE)
-        output = subprocess.check_output(["mail", "-s", "TaCoS29 talk registration", "-a", "Content-type: text/html", "moritzw@coli.uni-saarland.de"], stdin=echo.stdout)
+        output = subprocess.check_output(["mail", "-s", "TaCoS29 talk registration", "-a", "Content-type: text/html", user["email"]], stdin=echo.stdout)
 
         response['status']='OK'
         response['message']="Successfully registered"
         
-        return response
+        return jsonify(response)
 
 
 
