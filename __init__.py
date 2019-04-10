@@ -159,14 +159,14 @@ def create_app(test_config=None):
         # check if something required is missing
         formTags = ["uid", "title", "subtitle", "presentation"]
         for tag in formTags:
-             if request.form[tag] == "" or request.form[tag] is None:
-                 if tag == 'uid':
-                     tag = "code"
+            if request.form[tag] == "" or request.form[tag] is None:
+                if tag == 'uid':
+                    tag = "code"
                 response['status']='ERROR'
                 response['message']="Please fill in the " + tag[0].upper() + tag[1:]
                 app.logger.info('Register error '+ tag)
                 return jsonify(response)
-
+        db = get_db()
         user = db.execute('SELECT * FROM user WHERE id=?', (uid,)).fetchone()
         # check if user is registered or not
         if user is None:
@@ -182,12 +182,11 @@ def create_app(test_config=None):
             while path.is_file():
                 path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(uid + str(index) + request.files[f].filename))
             request.files[f].save(path)
-        db = get_db()
 
         # write into database
         db.execute(
             'INSERT INTO talk (uid, title, subtitle, type, abstract, notes) VALUES (?, ?, ?, ?, ?, ?)',
-            (code, title, subtitle, presentation, abstract, notes)
+            (uid, title, subtitle, presentation, abstract, notes)
         )
 
 
