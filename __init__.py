@@ -32,7 +32,7 @@ from flask_tacos.db import init_app
 # }
 fee_path = "/home/tacos2019/flask_tacos/fees.txt" #"/Users/mo/Dropbox/Uni/TaCos/flask_tacos/fees.txt" # "/home/tacos2019/flask_tacos/fees.txt"
 
-UPLOAD_FOLDER = '/home/tacos2019/talk_papers'
+UPLOAD_FOLDER = '/home/tacos2019/flask_tacos/talk_papers'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf'])
 
 
