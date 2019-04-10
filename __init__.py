@@ -4,11 +4,14 @@ import random
 import logging
 import subprocess
 
+import click
+
 from flask import Flask
 from flask import request
 from flask import jsonify
 from flask_cors import CORS
 from flask_cors import cross_origin
+from flask.cli import with_appcontext
 
 # from flask_mail import Mail, Message
 
@@ -145,7 +148,7 @@ def create_app(test_config=None):
     def talk():
         response = {}
 
-        uid = request.form['uid']
+        code = request.form['uid']
         title = request.form['title']
         subtitle = request.form['subtitle']
         presentation = request.form['presentation']
@@ -160,7 +163,7 @@ def create_app(test_config=None):
         #     return jsonify(response)
 
         # check if something required is missing
-        formTags = ["uid", "title", "subtitle", "presentation"]
+        formTags = ["code", "title", "subtitle", "presentation"]
         for tag in formTags:
              if request.form[tag] == "" or request.form[tag] is None:
                 response['status']='ERROR'
@@ -176,11 +179,12 @@ def create_app(test_config=None):
             while path.is_file():
                 path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(uid + str(index) + request.files[f].filename))
             request.files[f].save(path)
+        db = get_db()
 
         # write into database
         db.execute(
-            'INSERT INTO talk (uid, title, subtitle, type, abstract, shortDescription, notes) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            (uid, title, subtitle, presentation, abstract, description, notes)
+            'INSERT INTO talk (uid, title, subtitle, type, abstract, notes) VALUES (?, ?, ?, ?, ?, ?)',
+            (code, title, subtitle, presentation, abstract, notes)
         )
 
         # send email if everything went fine
