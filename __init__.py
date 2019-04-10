@@ -150,12 +150,11 @@ def create_app(test_config=None):
         subtitle = request.form['subtitle']
         presentation = request.form['presentation']
         description = request.form['description']
-
-        for f in request.files:
-            f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(uid + f.filename)))
-
         app.logger.info(request.form)
 
+        for f in request.files:
+            app.logger.info(f)
+            request.files[f].save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(uid + request.files[f].filename)))
         return "N/A"
 
 
