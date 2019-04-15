@@ -124,11 +124,11 @@ def create_app(test_config=None):
             html_message = "Hi {0},<br>".format(given_name)
             html_message += "Thank you for registering for TaCoS 29!<br>"
             html_message += "Your code is {0}.<br><br>".format(uid)
-            html_message += "If you want to check your registration status enter your code under ''Check Registration Status'' on <a href='https://tacos2019.coli.uni-saarland.de/registration/'>https://tacos2019.coli.uni-saarland.de/registration/</a><br>"
-            html_message += "To complete your registration please send us X €. Please also consider presenting something: <a href='https://tacos2019.coli.uni-saarland.de/call/'>https://tacos2019.coli.uni-saarland.de/call/</a><br><br>"
+            html_message += "If you want to check your registration status enter your code under ''Check Registration Status'' on <a href='https://tacos2019.coli.uni-saarland.de/registration/'>https://tacos2019.coli.uni-saarland.de/registration/</a>.<br>"
+            html_message += "To complete your registration please send us X €. Please also consider presenting something: <a href='https://tacos2019.coli.uni-saarland.de/call/'>https://tacos2019.coli.uni-saarland.de/call/</a>.<br><br>"
             html_message += "Recipient: Verein der Freunde der FR Sprachwissenschaft und Sprachtechnologie<br>"
             html_message += "IBAN: DE48 5919 0000 0117 1620 01<br>"
-            html_message += "BIC: BIC: SABADE5S<br>"
+            html_message += "BIC: SABADE5S<br>"
             html_message += "Bank: Bank 1 Saar <br>"
             html_message += "Reference (Verwendungszweck): TaCoS Teilnehmer {0}<br>".format(uid)
             html_message += "Amount (Betrag): X€<br><br>"
@@ -137,7 +137,7 @@ def create_app(test_config=None):
             # send email via terminal (a bit hacky but with this we don't need to save the password
             # and flask-mail didn't want to work on the server)
             echo = subprocess.Popen(["echo", "",html_message, ""], stdout=subprocess.PIPE)
-            output = subprocess.check_output(["mail", "-s", "TaCoS29 registration", "-a", "Content-type: text/html", email], stdin=echo.stdout)
+            output = subprocess.check_output(["mail", "-s", "Registration at TaCoS 29", "-a", "Content-type: text/html", email], stdin=echo.stdout)
 
             response['status']='OK'
             response['message']="Successfully registered"
@@ -252,18 +252,18 @@ def create_app(test_config=None):
         html_message = "Hi [NAME],<br>"
         html_message += "Thank you for registering for TaCoS 29!<br>"
         html_message += "Your code is {0}.<br><br>".format(uid)
-        html_message += "If you want to check your registration status enter your code under ''Check Registration Status'' on <a href='https://tacos2019.coli.uni-saarland.de/registration/'>https://tacos2019.coli.uni-saarland.de/registration/</a><br>"
-        html_message += "To complete your registration please send us X €. Please also consider presenting something: <a href='https://tacos2019.coli.uni-saarland.de/call/'>https://tacos2019.coli.uni-saarland.de/call/</a><br><br>"
+        html_message += "If you want to check your registration status enter your code under ''Check Registration Status'' on <a href='https://tacos2019.coli.uni-saarland.de/registration/'>https://tacos2019.coli.uni-saarland.de/registration/</a>.<br>"
+        html_message += "To complete your registration please send us X €. Please also consider presenting something: <a href='https://tacos2019.coli.uni-saarland.de/call/'>https://tacos2019.coli.uni-saarland.de/call/</a>.<br><br>"
         html_message += "Recipient: Verein der Freunde der FR Sprachwissenschaft und Sprachtechnologie<br>"
         html_message += "IBAN: DE48 5919 0000 0117 1620 01<br>"
-        html_message += "BIC: BIC: SABADE5S<br>"
+        html_message += "BIC: SABADE5S<br>"
         html_message += "Bank: Bank 1 Saar <br>"
         html_message += "Reference (Verwendungszweck): TaCoS Teilnehmer {0}<br>".format(uid)
         html_message += "Amount (Betrag): X€<br><br>"
         html_message += "Best,<br>Your TaCoS team"
 
         echo = subprocess.Popen(["echo", "",html_message, ""], stdout=subprocess.PIPE)
-        output = subprocess.check_output(["mail", "-s", "subject", "-a", "Content-type: text/html", "mlinde@coli.uni-saarland.de"], stdin=echo.stdout)
+        output = subprocess.check_output(["mail", "-s", "Registration at TaCoS 29", "-a", "Content-type: text/html", "mlinde@coli.uni-saarland.de"], stdin=echo.stdout)
         app.logger.info('email sent '+ str(output))
 
         # this doesn't work because of the pipe
