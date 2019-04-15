@@ -175,7 +175,7 @@ def create_app(test_config=None):
         # check if user is registered or not
         if user is None:
             response['status']='ERROR'
-            response['message']="Please register first"
+            response['message']="Mhm. We can't find that registration in our database. You might have to register first."
             return jsonify(response)
 
         # save file in form uid + unique index number + .pdf to upload folder
