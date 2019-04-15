@@ -124,7 +124,7 @@ def create_app(test_config=None):
             html_message = "Hi {0},<br>".format(given_name)
             html_message += "Thank you for registering for TaCoS 29!<br>"
             html_message += "Your code is {0}.<br><br>".format(uid)
-            html_message += "If you want to check your registration status enter your code under ''Check Registration Status'' on <a href='https://tacos2019.coli.uni-saarland.de/registration/'>https://tacos2019.coli.uni-saarland.de/registration/</a>.<br>"
+            html_message += "If you want to check your registration status, enter your code under ''Check Registration Status'' on <a href='https://tacos2019.coli.uni-saarland.de/registration/#status'>https://tacos2019.coli.uni-saarland.de/registration/#status</a>.<br>"
             html_message += "To complete your registration please send us X €. Please also consider presenting something: <a href='https://tacos2019.coli.uni-saarland.de/call/'>https://tacos2019.coli.uni-saarland.de/call/</a>.<br><br>"
             html_message += "Recipient: Verein der Freunde der FR Sprachwissenschaft und Sprachtechnologie<br>"
             html_message += "IBAN: DE48 5919 0000 0117 1620 01<br>"
@@ -254,7 +254,7 @@ def create_app(test_config=None):
         html_message = "Hi [NAME],<br>"
         html_message += "Thank you for registering for TaCoS 29!<br>"
         html_message += "Your code is {0}.<br><br>".format(uid)
-        html_message += "If you want to check your registration status enter your code under ''Check Registration Status'' on <a href='https://tacos2019.coli.uni-saarland.de/registration/'>https://tacos2019.coli.uni-saarland.de/registration/</a>.<br>"
+        html_message += "If you want to check your registration status, enter your code under ''Check Registration Status'' on <a href='https://tacos2019.coli.uni-saarland.de/registration/#status'>https://tacos2019.coli.uni-saarland.de/registration/#status</a>.<br>"
         html_message += "To complete your registration please send us X €. Please also consider presenting something: <a href='https://tacos2019.coli.uni-saarland.de/call/'>https://tacos2019.coli.uni-saarland.de/call/</a>.<br><br>"
         html_message += "Recipient: Verein der Freunde der FR Sprachwissenschaft und Sprachtechnologie<br>"
         html_message += "IBAN: DE48 5919 0000 0117 1620 01<br>"
