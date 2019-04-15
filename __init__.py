@@ -81,6 +81,7 @@ def create_app(test_config=None):
         given_name = request.form['given_name']
         surname = request.form['surname']
         nutrition = request.form['nutrition']
+        university = request.form['university']
         busticket = "ticket" in request.form
 
         # check if something required is missing
@@ -112,8 +113,8 @@ def create_app(test_config=None):
             
             # insert new user into db
             db.execute(
-                'INSERT INTO user (id, email, given_name, surname, nutrition, busticket) VALUES (?, ?, ?, ?, ?, ?)',
-                (uid, email, given_name, surname, nutrition, busticket)
+                'INSERT INTO user (id, email, given_name, surname, university, nutrition, busticket) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                (uid, email, given_name, surname, university, nutrition, busticket)
             )
             db.commit()
             response['status']='OK'
@@ -194,11 +195,14 @@ def create_app(test_config=None):
 
         # send email if everything went fine
         # build email text
-        html_message = "Hello {0},<br>".format(user["given_name"])
-        html_message += "Thank you very much for registering a talk for TaCoS29!<br>"
-        html_message += "Your code is {0}.<br><br>".format(uid)
-        html_message += "We will review what you sent us and let you know as soon as possible if and when your talk will happen.<br>"
-        html_message += "To complete your registration send us X €. Please also consider presenting something: <a href='https://tacos2019.coli.uni-saarland.de/call/'>https://tacos2019.coli.uni-saarland.de/call/</a><br><br>"
+        html_message = "Hi {0},<br>".format(user["given_name"])
+        html_message += "Thank you very much for registering a presentation for TaCoS 29!"
+        html_message += "We will review what you sent us and let you know as soon as possible when your presentation will take place.<br>"
+        html_message += "The presentation is associated with the code {0}.<br><br>".format(uid)
+        if presentation in {"longtalk","tutorial"}:
+            html_message += "Since you registered a long talk or a tutorial, you don't have to pay any attendence fee. <br>"
+        else:
+            html_message += "To complete your registration, please send us half of the attendence fee.<br>"
         html_message += "Best,<br>Your TaCoS team"
 
         # send email via terminal (a bit hacky but with this we don't need to save the password
@@ -259,7 +263,7 @@ def create_app(test_config=None):
         html_message += "Best,<br>Your TaCoS team"
 
         echo = subprocess.Popen(["echo", "",html_message, ""], stdout=subprocess.PIPE)
-        output = subprocess.check_output(["mail", "-s", "subject", "-a", "Content-type: text/html", "moritzw@coli.uni-saarland.de"], stdin=echo.stdout)
+        output = subprocess.check_output(["mail", "-s", "subject", "-a", "Content-type: text/html", "mlinde@coli.uni-saarland.de"], stdin=echo.stdout)
         app.logger.info('email sent '+ str(output))
 
         # this doesn't work because of the pipe

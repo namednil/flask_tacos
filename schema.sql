@@ -6,6 +6,7 @@ CREATE TABLE user (
   email TEXT NOT NULL,
   given_name TEXT  NOT NULL,
   surname TEXT NOT NULL,
+  university TEXT,
   nutrition TEXT NOT NULL,
   busticket INTEGER NOT NULL
 );
