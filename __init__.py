@@ -120,15 +120,17 @@ def create_app(test_config=None):
             response['message']="Successfully registered"
 
             # build email text
-            html_message = "Hello {0},<br>".format(given_name)
-            html_message += "Thank you for registering for TaCoS29!<br>"
+            html_message = "Hi {0},<br>".format(given_name)
+            html_message += "Thank you for registering for TaCoS 29!<br>"
             html_message += "Your code is {0}.<br><br>".format(uid)
             html_message += "If you want to check your registration status enter your code under ''Check Registration Status'' on <a href='https://tacos2019.coli.uni-saarland.de/registration/'>https://tacos2019.coli.uni-saarland.de/registration/</a><br>"
-            html_message += "To complete your registration send us X €. Please also consider presenting something: <a href='https://tacos2019.coli.uni-saarland.de/call/'>https://tacos2019.coli.uni-saarland.de/call/</a><br><br>"
-            html_message += "IBAN: de123456789xxxx<br>"
-            html_message += "BIC: XXXXXXXXXXX<br>"
-            html_message += "Reference (Verwendungszweck): {0}<br>".format(uid)
-            html_message += "Amount (Betrag): 10000000€<br><br>".format(uid)
+            html_message += "To complete your registration please send us X €. Please also consider presenting something: <a href='https://tacos2019.coli.uni-saarland.de/call/'>https://tacos2019.coli.uni-saarland.de/call/</a><br><br>"
+            html_message += "Recipient: Verein der Freunde der FR Sprachwissenschaft und Sprachtechnologie<br>"
+            html_message += "IBAN: DE48 5919 0000 0117 1620 01<br>"
+            html_message += "BIC: BIC: SABADE5S<br>"
+            html_message += "Bank: Bank 1 Saar <br>"
+            html_message += "Reference (Verwendungszweck): TaCoS Teilnehmer {0}<br>".format(uid)
+            html_message += "Amount (Betrag): X€<br><br>"
             html_message += "Best,<br>Your TaCoS team"
 
             # send email via terminal (a bit hacky but with this we don't need to save the password
@@ -243,15 +245,17 @@ def create_app(test_config=None):
         # app.logger.critical('this is a CRITICAL message')
         uid = ''.join(random.choice(string.ascii_letters) for _ in range(8))
 
-        html_message = "Hello {0},<br>".format(given_name)
-        html_message += "Thank you for registering for TaCoS29!<br>"
+        html_message = "Hi [NAME],<br>"
+        html_message += "Thank you for registering for TaCoS 29!<br>"
         html_message += "Your code is {0}.<br><br>".format(uid)
-        html_message += "If you want to check your registration status enter your code under ''Check Registration Status'' on <a href='https://tacos2019.coli.uni-saarland.de/registration/'>https://tacos2019.coli.uni-saarland.de/registration/</a><br>"
-        html_message += "To complete your registration send us X €. Please also consider presenting something: <a href='https://tacos2019.coli.uni-saarland.de/call/'>https://tacos2019.coli.uni-saarland.de/call/</a><br><br>"
-        html_message += "IBAN: de123456789xxxx<br>"
-        html_message += "BIC: XXXXXXXXXXX<br>"
-        html_message += "Reference (Verwendungszweck): {0}<br>".format(uid)
-        html_message += "Amount (Betrag): 10000000€<br><br>".format(uid)
+        html_message += "If you want to check your registration status enter your code under ''Check Registration Status'' on <a href='https://tacos2019.coli.uni-saarland.de/registration/'>https://tacos2019$
+        html_message += "To complete your registration please send us X €. Please also consider presenting something: <a href='https://tacos2019.coli.uni-saarland.de/call/'>https://tacos2019.coli.uni-saarla$
+        html_message += "Recipient: Verein der Freunde der FR Sprachwissenschaft und Sprachtechnologie<br>"
+        html_message += "IBAN: DE48 5919 0000 0117 1620 01<br>"
+        html_message += "BIC: BIC: SABADE5S<br>"
+        html_message += "Bank: Bank 1 Saar <br>"
+        html_message += "Reference (Verwendungszweck): TaCoS Teilnehmer {0}<br>".format(uid)
+        html_message += "Amount (Betrag): X€<br><br>"
         html_message += "Best,<br>Your TaCoS team"
 
         echo = subprocess.Popen(["echo", "",html_message, ""], stdout=subprocess.PIPE)
