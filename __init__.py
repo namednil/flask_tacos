@@ -167,7 +167,7 @@ def create_app(test_config=None):
                 if tag == 'uid':
                     tag = "code"
                 response['status']='ERROR'
-                response['message']="Please fill in the " + tag[0].upper() + tag[1:]
+                response['message']="Please fill in the " + tag
                 app.logger.info('Register error '+ tag)
                 return jsonify(response)
         db = get_db()
@@ -175,7 +175,7 @@ def create_app(test_config=None):
         # check if user is registered or not
         if user is None:
             response['status']='ERROR'
-            response['message']="Mhm. We can't find that registration in our database. You might have to register first."
+            response['message']="Mhm. We can't find that registration code in our database. You might have to register first."
             return jsonify(response)
 
         # save file in form uid + unique index number + .pdf to upload folder
