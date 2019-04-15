@@ -197,8 +197,8 @@ def create_app(test_config=None):
         # send email if everything went fine
         # build email text
         html_message = "Hi {0},<br><br>".format(user["given_name"])
-        html_message += 'Thank you very much for registering a presentation for TaCoS 29 titled "{0}"!'.format(title)
-        html_message += "We will review what you sent us and let you know as soon as possible when your presentation will take place.<br>"
+        html_message += 'Thank you very much for registering a presentation for TaCoS 29 titled "{0}"!<br>'.format(title)
+        html_message += "We will review what you sent us and come back to you as soon as possible.<br>"
         html_message += "The presentation is associated with the code {0}.<br><br>".format(uid)
         if presentation in {"longtalk","tutorial"}:
             html_message += "Since you registered a long talk or a tutorial, you don't have to pay any attendence fee. <br><br>"
