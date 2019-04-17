@@ -183,7 +183,7 @@ def create_app(test_config=None):
         for f in request.files:
             app.logger.info(f)
             path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(uid + str(index) + request.files[f].filename))
-            while path.is_file():
+            while os.path.isfile(path):
                 path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(uid + str(index) + request.files[f].filename))
             request.files[f].save(path)
 
