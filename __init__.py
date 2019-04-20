@@ -193,6 +193,7 @@ def create_app(test_config=None):
             'INSERT INTO talk (uid, title, subtitle, type, abstract, notes) VALUES (?, ?, ?, ?, ?, ?)',
             (uid, title, subtitle, presentation, abstract, notes)
         )
+        db.commit()
 
 
         # send email if everything went fine
