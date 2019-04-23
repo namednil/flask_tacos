@@ -24,6 +24,8 @@ from flask_tacos.crossdomain import crossdomain
 from flask_tacos.db import get_db
 from flask_tacos.db import init_app
 
+from datetime import date
+
 # mail_settings = {
 #     "MAIL_SERVER": 'mail.coli.uni-saarland.de',
 #     "MAIL_PORT": 465,
@@ -119,20 +121,26 @@ def create_app(test_config=None):
             db.commit()
             response['status']='OK'
             response['message']="Successfully registered"
+            
+            today = date.today()
+            if today <= date(2019, 5,26): #Early Bird Deadline: 26th of May
+                fee = 20
+            else:
+                fee = 25
 
             # build email text
             html_message = "Hi {0},<br>".format(given_name)
             html_message += "Thank you for registering for TaCoS 29!<br>"
             html_message += "Your code is {0}.<br><br>".format(uid)
             html_message += "If you want to check your registration status, enter your code under ''Check Registration Status'' on <a href='https://tacos2019.coli.uni-saarland.de/registration/#status'>https://tacos2019.coli.uni-saarland.de/registration/#status</a>.<br>"
-            html_message += "To complete your registration please send us X €. Please also consider presenting something: <a href='https://tacos2019.coli.uni-saarland.de/call/'>https://tacos2019.coli.uni-saarland.de/call/</a>.<br><br>"
+            html_message += "To complete your registration please pay the attendence fee of {}€. Please also consider presenting something: <a href='https://tacos2019.coli.uni-saarland.de/call/'>https://tacos2019.coli.uni-saarland.de/call/</a>.<br><br>".format(fee)
             html_message += "Recipient: Verein der Freunde der FR Sprachwissenschaft und Sprachtechnologie<br>"
             html_message += "IBAN: DE48 5919 0000 0117 1620 01<br>"
             html_message += "BIC: SABADE5S<br>"
             html_message += "Bank: Bank 1 Saar <br>"
             html_message += "Reference (Verwendungszweck): TaCoS Teilnehmer {0}<br>".format(uid)
-            html_message += "Amount (Betrag): X€<br><br>"
-            html_message += "If you have any questions, just reply to this e-mail.<br><br>"
+            html_message += "Amount (Betrag): {}€<br><br>".format(fee)
+            html_message += "If you have any questions or comments, simply reply to this e-mail.<br><br>"
             html_message += "Best,<br>Your TaCoS team"
 
             # send email via terminal (a bit hacky but with this we don't need to save the password
@@ -205,8 +213,19 @@ def create_app(test_config=None):
         if presentation in {"longtalk","tutorial"}:
             html_message += "Since you registered a long talk or a tutorial, you don't have to pay any attendence fee. <br><br>"
         else:
-            html_message += "To complete your registration, please send us half of the regular/early bird attendence fee to the bank account mentioned in the original registration mail.<br><br>"
-        html_message += "If you have any questions, just reply to this e-mail.<br><br>"
+            today = date.today()
+            if today <= date(2019, 5,26): #Early Bird Deadline: 26th of May
+                fee = 10
+            else:
+                fee = 12.5
+            html_message += "In case you haven't payed the attendence fee yet, please send us half of the regular/early bird attendence fee. Currently that's {}€.<br><br>".format(fee)
+            html_message += "Recipient: Verein der Freunde der FR Sprachwissenschaft und Sprachtechnologie<br>"
+            html_message += "IBAN: DE48 5919 0000 0117 1620 01<br>"
+            html_message += "BIC: SABADE5S<br>"
+            html_message += "Bank: Bank 1 Saar <br>"
+            html_message += "Reference (Verwendungszweck): TaCoS Teilnehmer {0}<br>".format(uid)
+            html_message += "Amount (Betrag): {}€<br><br>".format(fee)
+        html_message += "If you have any questions, simply reply to this e-mail.<br><br>"
         html_message += "Best,<br>Your TaCoS team"
 
         # send email via terminal (a bit hacky but with this we don't need to save the password
@@ -252,19 +271,25 @@ def create_app(test_config=None):
         # app.logger.error('this is an ERROR message')
         # app.logger.critical('this is a CRITICAL message')
         uid = ''.join(random.choice(string.ascii_letters) for _ in range(8))
+        
+        today = date.today()
+        if today <= date(2019, 5,26): #Early Bird Deadline: 26th of May
+            fee = 20
+        else:
+            fee = 25
 
         html_message = "Hi [NAME],<br>"
         html_message += "Thank you for registering for TaCoS 29!<br>"
         html_message += "Your code is {0}.<br><br>".format(uid)
         html_message += "If you want to check your registration status, enter your code under ''Check Registration Status'' on <a href='https://tacos2019.coli.uni-saarland.de/registration/#status'>https://tacos2019.coli.uni-saarland.de/registration/#status</a>.<br>"
-        html_message += "To complete your registration please send us X €. Please also consider presenting something: <a href='https://tacos2019.coli.uni-saarland.de/call/'>https://tacos2019.coli.uni-saarland.de/call/</a>.<br><br>"
+        html_message += "To complete your registration please pay the attendence fee of {}€. Please also consider presenting something: <a href='https://tacos2019.coli.uni-saarland.de/call/'>https://tacos2019.coli.uni-saarland.de/call/</a>.<br><br>".format(fee)
         html_message += "Recipient: Verein der Freunde der FR Sprachwissenschaft und Sprachtechnologie<br>"
         html_message += "IBAN: DE48 5919 0000 0117 1620 01<br>"
         html_message += "BIC: SABADE5S<br>"
         html_message += "Bank: Bank 1 Saar <br>"
         html_message += "Reference (Verwendungszweck): TaCoS Teilnehmer {0}<br>".format(uid)
-        html_message += "Amount (Betrag): X€<br><br>"
-        html_message += "If you have any questions, just reply to this e-mail.<br><br>"
+        html_message += "Amount (Betrag): {}€<br><br>".format(fee)
+        html_message += "If you have any questions or comments, simply reply to this e-mail.<br><br>"
         html_message += "Best,<br>Your TaCoS team"
 
         echo = subprocess.Popen(["echo", "",html_message, ""], stdout=subprocess.PIPE)
