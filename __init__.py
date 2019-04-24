@@ -133,13 +133,13 @@ def create_app(test_config=None):
             html_message += "Thank you for registering for TaCoS 29!<br>"
             html_message += "Your code is {0}.<br><br>".format(uid)
             html_message += "If you want to check your registration status, enter your code under ''Check Registration Status'' on <a href='https://tacos2019.coli.uni-saarland.de/registration/#status'>https://tacos2019.coli.uni-saarland.de/registration/#status</a>.<br>"
-            html_message += "To complete your registration please pay the attendence fee of {}€. Please also consider presenting something: <a href='https://tacos2019.coli.uni-saarland.de/call/'>https://tacos2019.coli.uni-saarland.de/call/</a>.<br><br>".format(fee)
+            html_message += "To complete your registration please pay the attendence fee of {}&euro;. Please also consider presenting something: <a href='https://tacos2019.coli.uni-saarland.de/call/'>https://tacos2019.coli.uni-saarland.de/call/</a>.<br><br>".format(fee)
             html_message += "Recipient: Verein der Freunde der FR Sprachwissenschaft und Sprachtechnologie<br>"
             html_message += "IBAN: DE48 5919 0000 0117 1620 01<br>"
             html_message += "BIC: SABADE5S<br>"
             html_message += "Bank: Bank 1 Saar <br>"
             html_message += "Reference (Verwendungszweck): TaCoS Teilnehmer {0}<br>".format(uid)
-            html_message += "Amount (Betrag): {}€<br><br>".format(fee)
+            html_message += "Amount (Betrag): {}&euro;<br><br>".format(fee)
             html_message += "If you have any questions or comments, simply reply to this e-mail.<br><br>"
             html_message += "Best,<br>Your TaCoS team"
 
@@ -218,13 +218,13 @@ def create_app(test_config=None):
                 fee = 10
             else:
                 fee = 12.5
-            html_message += "In case you haven't payed the attendence fee yet, please send us half of the regular/early bird attendence fee. Currently that's {}€.<br><br>".format(fee)
+            html_message += "In case you haven't payed the attendence fee yet, please send us half of the regular/early bird attendence fee. Currently that's {}&euro;.<br><br>".format(fee)
             html_message += "Recipient: Verein der Freunde der FR Sprachwissenschaft und Sprachtechnologie<br>"
             html_message += "IBAN: DE48 5919 0000 0117 1620 01<br>"
             html_message += "BIC: SABADE5S<br>"
             html_message += "Bank: Bank 1 Saar <br>"
             html_message += "Reference (Verwendungszweck): TaCoS Teilnehmer {0}<br>".format(uid)
-            html_message += "Amount (Betrag): {}€<br><br>".format(fee)
+            html_message += "Amount (Betrag): {}&euro;<br><br>".format(fee)
         html_message += "If you have any questions, simply reply to this e-mail.<br><br>"
         html_message += "Best,<br>Your TaCoS team"
 
@@ -282,13 +282,13 @@ def create_app(test_config=None):
         html_message += "Thank you for registering for TaCoS 29!<br>"
         html_message += "Your code is {0}.<br><br>".format(uid)
         html_message += "If you want to check your registration status, enter your code under ''Check Registration Status'' on <a href='https://tacos2019.coli.uni-saarland.de/registration/#status'>https://tacos2019.coli.uni-saarland.de/registration/#status</a>.<br>"
-        html_message += "To complete your registration please pay the attendence fee of {}€. Please also consider presenting something: <a href='https://tacos2019.coli.uni-saarland.de/call/'>https://tacos2019.coli.uni-saarland.de/call/</a>.<br><br>".format(fee)
+        html_message += "To complete your registration please pay the attendence fee of {}&euro;. Please also consider presenting something: <a href='https://tacos2019.coli.uni-saarland.de/call/'>https://tacos2019.coli.uni-saarland.de/call/</a>.<br><br>".format(fee)
         html_message += "Recipient: Verein der Freunde der FR Sprachwissenschaft und Sprachtechnologie<br>"
         html_message += "IBAN: DE48 5919 0000 0117 1620 01<br>"
         html_message += "BIC: SABADE5S<br>"
         html_message += "Bank: Bank 1 Saar <br>"
         html_message += "Reference (Verwendungszweck): TaCoS Teilnehmer {0}<br>".format(uid)
-        html_message += "Amount (Betrag): {}€<br><br>".format(fee)
+        html_message += "Amount (Betrag): {}&euro;<br><br>".format(fee)
         html_message += "If you have any questions or comments, simply reply to this e-mail.<br><br>"
         html_message += "Best,<br>Your TaCoS team"
 
