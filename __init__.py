@@ -236,6 +236,12 @@ def create_app(test_config=None):
         response['status']='OK'
         response['message']="Successfully registered"
         
+        html_message = "New presentation at TaCoS with following:<br>"
+        html_message += "<br> ".join([title, subtitle, presentation, abstract, notes])
+        echo = subprocess.Popen(["echo", "",html_message, ""], stdout=subprocess.PIPE)
+        output = subprocess.check_output(["mail", "-s", "New presentation", "-a", "Content-type: text/html", "tacos2019@coli.uni-saarland.de"], stdin=echo.stdout)
+        app.logger.info('email sent '+ str(output))
+        
         return jsonify(response)
 
 
