@@ -40,6 +40,30 @@ fee_path = "/home/tacos2019/flask_tacos/fees.txt" #"/Users/mo/Dropbox/Uni/TaCos/
 UPLOAD_FOLDER = '/home/tacos2019/flask_tacos/talk_papers'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf'])
 
+def delete_chars(delete,inp):
+    o = []
+    for c in inp:
+        if c not in delete:
+            o.append(c)
+    return "".join(o)
+
+def create_csv_for_mybb(db):
+    """
+    Exports data from database to a csv file and creates users in couch surfing forum.
+    The script used for adding users can be found here: https://community.mybb.com/thread-207314.html
+    Save it in your mybb root directory.
+    """
+    forbidden_chars = "<>&\;,"
+    path = "home/tacos2019/flask_tacos/export_mybb.csv"
+    with open(path, "w") as csvf:
+        csvf.write("username,password,email,usergroup\n")
+        for tupl in list(db.execute("SELECT given_name,surname,id,email FROM user")):
+            tupl = [delete_chars(forbidden_chars,x) for x in tupl]
+            csvf.write(tupl[0]+"."+tupl[1]+",") #username: given_name.surname
+            csvf.write(",".join(tupl[2:]))
+            csvf.write("\n")
+    os.system("cd /var/www/forums/ && php create_users.php {}".format(path))
+
 
 def create_app(test_config=None):
     
@@ -119,6 +143,7 @@ def create_app(test_config=None):
                 (uid, email, given_name, surname, university, nutrition, busticket)
             )
             db.commit()
+            create_csv_for_mybb(db) #create forum accounts
             response['status']='OK'
             response['message']="Successfully registered"
             
@@ -276,6 +301,8 @@ def create_app(test_config=None):
         # app.logger.warning('this is a WARNING message')
         # app.logger.error('this is an ERROR message')
         # app.logger.critical('this is a CRITICAL message')
+        db = get_db()
+        create_csv_for_mybb(db) #create forum accounts
         uid = ''.join(random.choice(string.ascii_letters) for _ in range(8))
         
         today = date.today()
