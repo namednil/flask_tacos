@@ -58,9 +58,9 @@ def create_csv_for_mybb(db):
     with open(path, "w") as csvf:
         csvf.write("username,password,email,usergroup\n")
         for tupl in list(db.execute("SELECT given_name,surname,id,email FROM user")):
-            tupl = [delete_chars(forbidden_chars,x) for x in tupl]
-            csvf.write(tupl[0]+"."+tupl[1]+",") #username: given_name.surname
+            csvf.write(delete_chars(forbidden_chars,tupl[0])+"."+delete_chars(forbidden_chars,tupl[1])+",") #username: given_name.surname
             csvf.write(",".join(tupl[2:]))
+            csvf.write(",Registered")
             csvf.write("\n")
     os.system("cd /var/www/forums/ && php create_users.php {}".format(path))
 
