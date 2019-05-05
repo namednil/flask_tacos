@@ -54,7 +54,7 @@ def create_csv_for_mybb(db):
     Save it in your mybb root directory.
     """
     forbidden_chars = "<>&\;,"
-    path = "home/tacos2019/flask_tacos/export_mybb.csv"
+    path = "/home/tacos2019/flask_tacos/export_mybb.csv"
     with open(path, "w") as csvf:
         csvf.write("username,password,email,usergroup\n")
         for tupl in list(db.execute("SELECT given_name,surname,id,email FROM user")):
